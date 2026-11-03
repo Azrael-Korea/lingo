@@ -1,0 +1,937 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#1f2a44">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>두 언어 회화 – 영어·스페인어</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f6f3ee; --card:#fff; --ink:#1f2a44; --muted:#6b7280; --line:#e7e2d9;
+  --en:#2f6fdb; --en-soft:#e8f0fd; --es:#d9532b; --es-soft:#fdece6;
+  --ok:#1a9a5a; --ok-soft:#e5f6ec; --bad:#d23b3b; --bad-soft:#fde9e9;
+  --radius:16px;
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--ink);font-family:"Noto Sans KR",system-ui,-apple-system,sans-serif;-webkit-tap-highlight-color:transparent}
+body{padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left)}
+button{font:inherit;color:inherit;border:0;background:none;cursor:pointer}
+.wrap{max-width:560px;margin:0 auto;padding:16px 16px 40px}
+header.top{display:flex;align-items:center;justify-content:space-between;margin:4px 0 16px}
+header.top h1{font-size:20px;margin:0;font-weight:700;letter-spacing:-.3px}
+header.top h1 small{display:block;font-size:12px;color:var(--muted);font-weight:400;margin-top:2px}
+.icon-btn{width:40px;height:40px;border-radius:12px;display:grid;place-items:center;background:var(--card);border:1px solid var(--line);font-size:18px}
+.notice{background:#fff8e1;border:1px solid #f1dfa6;border-radius:12px;padding:10px 12px;font-size:13px;line-height:1.5;margin-bottom:14px}
+.notice b{font-weight:700}
+.tabs{display:flex;gap:6px;margin-bottom:14px}
+.tab{flex:1;padding:10px 6px;border-radius:12px;background:var(--card);border:1px solid var(--line);font-size:14px;text-align:center}
+.tab.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.tab small{display:block;font-size:11px;opacity:.7}
+.review-bar{display:flex;align-items:center;justify-content:space-between;background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:12px 14px;margin-bottom:14px}
+.review-bar .t{font-size:14px}
+.review-bar .t b{font-size:18px}
+.pill-btn{padding:9px 14px;border-radius:999px;background:var(--ink);color:#fff;font-size:14px;font-weight:500}
+.pill-btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--line)}
+.pill-btn:disabled{opacity:.35}
+.unit{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:14px;margin-bottom:10px;display:flex;gap:12px;align-items:center;width:100%;text-align:left}
+.unit.locked{opacity:.55}
+.unit .num{width:36px;height:36px;border-radius:10px;background:var(--bg);display:grid;place-items:center;font-weight:700;font-size:14px;flex:none}
+.unit .body{flex:1;min-width:0}
+.unit .title{font-weight:700;font-size:15px}
+.unit .pat{font-size:12px;color:var(--muted);margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.bar{height:5px;background:var(--bg);border-radius:9px;margin-top:8px;overflow:hidden}
+.bar i{display:block;height:100%;background:var(--ok);border-radius:9px}
+.unit .pct{font-size:12px;color:var(--muted);flex:none;text-align:right;min-width:40px}
+/* unit page */
+.back{font-size:14px;color:var(--muted);padding:6px 0;margin-bottom:6px}
+.unit-head h2{margin:0 0 4px;font-size:22px}
+.unit-head .g{font-size:13px;color:var(--muted);line-height:1.6;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:10px 12px;margin:10px 0 14px}
+.mode{display:block;width:100%;text-align:left;background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:16px;margin-bottom:10px}
+.mode b{font-size:16px;display:block;margin-bottom:4px}
+.mode span{font-size:13px;color:var(--muted);line-height:1.5}
+.list{margin-top:16px}
+.row{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:10px 12px;margin-bottom:6px;font-size:13px;line-height:1.55}
+.row .ko{font-weight:500}
+.row .en{color:var(--en)}
+.row .es{color:var(--es)}
+.row .mark{float:right;font-size:12px}
+/* practice */
+.pbar{display:flex;align-items:center;gap:10px;margin-bottom:14px}
+.pbar .track{flex:1;height:6px;background:var(--line);border-radius:9px;overflow:hidden}
+.pbar .track i{display:block;height:100%;background:var(--ink);transition:width .3s}
+.pbar .cnt{font-size:13px;color:var(--muted);min-width:44px;text-align:right}
+.card{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:20px 18px;box-shadow:0 2px 10px rgba(31,42,68,.04)}
+.ko-big{font-size:22px;font-weight:700;line-height:1.45;letter-spacing:-.3px;margin-bottom:16px}
+.lang{border-radius:14px;padding:14px;margin-top:10px}
+.lang.en{background:var(--en-soft)}
+.lang.es{background:var(--es-soft)}
+.lang.dim{opacity:.45}
+.lang .lab{display:flex;align-items:center;justify-content:space-between;font-size:12px;font-weight:700;letter-spacing:.4px;margin-bottom:6px}
+.lang.en .lab{color:var(--en)}
+.lang.es .lab{color:var(--es)}
+.lang .txt{font-size:18px;line-height:1.5;font-weight:500}
+.lang .txt .w{border-radius:4px;padding:0 1px}
+.lang .txt .w.hit{color:var(--ok)}
+.lang .txt .w.miss{color:var(--bad);text-decoration:underline wavy;text-underline-offset:4px}
+.lang .heard{font-size:13px;color:var(--muted);margin-top:6px}
+.lang .placeholder{font-size:15px;color:var(--muted)}
+.speak-btn{width:36px;height:36px;border-radius:50%;background:#fff;display:grid;place-items:center;font-size:16px;box-shadow:0 1px 3px rgba(0,0,0,.08)}
+.score{display:inline-block;font-size:12px;font-weight:700;padding:2px 8px;border-radius:999px}
+.score.ok{background:var(--ok-soft);color:var(--ok)}
+.score.bad{background:var(--bad-soft);color:var(--bad)}
+.note{font-size:13px;line-height:1.55;background:#fffbea;border-radius:10px;padding:8px 10px;margin-top:12px}
+.actions{display:flex;gap:8px;margin-top:16px;flex-wrap:wrap}
+.actions .grow{flex:1}
+.big{width:100%;padding:15px;border-radius:14px;font-size:16px;font-weight:700;background:var(--ink);color:#fff}
+.big.en{background:var(--en)}
+.big.es{background:var(--es)}
+.big.ok{background:var(--ok)}
+.big.bad{background:var(--bad)}
+.big.ghost{background:transparent;color:var(--ink);border:1px solid var(--line);font-weight:500}
+.mic{width:84px;height:84px;border-radius:50%;margin:18px auto 6px;display:grid;place-items:center;font-size:34px;color:#fff;box-shadow:0 6px 18px rgba(0,0,0,.15)}
+.mic.en{background:var(--en)} .mic.es{background:var(--es)}
+.mic.rec{animation:pulse 1.2s infinite}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(210,59,59,.45)}70%{box-shadow:0 0 0 18px rgba(210,59,59,0)}100%{box-shadow:0 0 0 0 rgba(210,59,59,0)}}
+.mic-hint{text-align:center;font-size:13px;color:var(--muted);min-height:20px}
+.small-links{display:flex;justify-content:center;gap:16px;margin-top:10px}
+.small-links button{font-size:13px;color:var(--muted);text-decoration:underline;text-underline-offset:3px}
+.summary{text-align:center}
+.summary .big-num{font-size:44px;font-weight:700;margin:10px 0 0}
+.summary .sub{color:var(--muted);font-size:14px;margin-bottom:18px}
+.statrow{display:flex;gap:10px;margin:14px 0}
+.stat{flex:1;border-radius:14px;padding:12px}
+.stat.en{background:var(--en-soft);color:var(--en)} .stat.es{background:var(--es-soft);color:var(--es)}
+.stat b{display:block;font-size:22px}
+/* settings */
+.sheet-bg{position:fixed;inset:0;background:rgba(20,24,36,.4);display:flex;align-items:flex-end;justify-content:center;z-index:20}
+.sheet{background:var(--card);width:100%;max-width:560px;border-radius:20px 20px 0 0;padding:20px 18px calc(24px + env(safe-area-inset-bottom));max-height:85vh;overflow:auto}
+.sheet h3{margin:0 0 14px;font-size:18px}
+.field{margin-bottom:16px}
+.field label{display:block;font-size:13px;color:var(--muted);margin-bottom:6px}
+.seg{display:flex;background:var(--bg);border-radius:12px;padding:3px}
+.seg button{flex:1;padding:9px 4px;border-radius:9px;font-size:13px}
+.seg button.on{background:var(--card);box-shadow:0 1px 3px rgba(0,0,0,.1);font-weight:700}
+.sheet .info{font-size:12px;color:var(--muted);line-height:1.6;margin-top:6px}
+.listen-ctrl{display:flex;gap:8px;margin-top:16px}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.chip{background:rgba(255,255,255,.85);border-radius:9px;padding:5px 9px;font-size:13px;line-height:1.35}
+.chip b{font-weight:700;margin-right:5px}
+.chips.en .chip b{color:var(--en)} .chips.es .chip b{color:var(--es)}
+.chips-title{font-size:11px;color:var(--muted);margin-top:10px;font-weight:700;letter-spacing:.3px}
+.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:var(--ink);color:#fff;padding:10px 16px;border-radius:12px;font-size:13px;z-index:30;max-width:90%;text-align:center}
+</style>
+</head>
+<body>
+<div class="wrap" id="app"></div>
+<script>
+// 영어·스페인어 동시 회화 커리큘럼 데이터
+// 문장 형식: [한국어, 영어, 스페인어, 메모(선택)]
+const CURRICULUM = [
+{ level: 1, name: "생존 회화", desc: "현재형으로 여행·일상 기본 대화", units: [
+{ id: 1, title: "인사와 자기소개", en: "Hi, I'm ~ / Nice to meet you", es: "Hola, soy ~ / Mucho gusto", grammar: "스페인어는 주어(yo)를 보통 생략해요.", s: [
+["안녕하세요, 저는 민수예요.", "Hi, I'm Minsu.", "Hola, soy Minsu."],
+["만나서 반가워요.", "Nice to meet you.", "Mucho gusto."],
+["저도 만나서 반가워요.", "Nice to meet you too.", "Igualmente.", "igualmente = '마찬가지로'. 짧게 답할 때 써요."],
+["이름이 뭐예요?", "What's your name?", "¿Cómo te llamas?", "직역: '너는 너 자신을 어떻게 부르니?'"],
+["제 이름은 사라예요.", "My name is Sara.", "Me llamo Sara."],
+["어떻게 지내요?", "How are you?", "¿Cómo estás?"],
+["잘 지내요, 고마워요. 당신은요?", "I'm good, thanks. And you?", "Bien, gracias. ¿Y tú?"],
+["좋은 아침이에요.", "Good morning.", "Buenos días."],
+["좋은 오후예요.", "Good afternoon.", "Buenas tardes."],
+["잘 자요.", "Good night.", "Buenas noches.", "스페인어 Buenas noches는 저녁 인사로도 써요."],
+["나중에 봐요.", "See you later.", "Hasta luego."],
+["내일 봐요.", "See you tomorrow.", "Hasta mañana."],
+["저는 한국 사람이에요.", "I'm Korean.", "Soy coreano.", "여성은 coreana. 국적은 소문자로 써요."],
+["저는 영어와 스페인어를 배우고 있어요.", "I'm learning English and Spanish.", "Estoy aprendiendo inglés y español."],
+["좀 더 천천히 말해 주실 수 있어요?", "Can you speak more slowly, please?", "¿Puede hablar más despacio, por favor?"],
+["다시 한 번 말해 주실래요?", "Could you say that again, please?", "¿Puede repetirlo, por favor?"]
+]},
+{ id: 2, title: "출신·직업·가족", en: "I'm from ~ / I have ~", es: "Soy de ~ / Tengo ~", grammar: "ser는 정체성(출신·직업), tener는 '가지다'와 나이에 써요.", s: [
+["어디 출신이에요?", "Where are you from?", "¿De dónde eres?"],
+["저는 서울 출신이에요.", "I'm from Seoul.", "Soy de Seúl."],
+["무슨 일 하세요?", "What do you do?", "¿A qué te dedicas?"],
+["저는 엔지니어예요.", "I'm an engineer.", "Soy ingeniero.", "스페인어는 직업 앞에 관사(un)를 쓰지 않아요."],
+["저는 회사에서 일해요.", "I work at a company.", "Trabajo en una empresa."],
+["몇 살이에요?", "How old are you?", "¿Cuántos años tienes?"],
+["저는 서른다섯 살이에요.", "I'm thirty-five years old.", "Tengo treinta y cinco años.", "나이는 '몇 해를 가지고 있다'(tener)로 말해요."],
+["결혼했어요?", "Are you married?", "¿Estás casado?", "여성에게는 casada."],
+["형제자매 있어요?", "Do you have any brothers or sisters?", "¿Tienes hermanos?", "hermanos는 형제자매를 함께 가리켜요."],
+["여동생이 한 명 있어요.", "I have a younger sister.", "Tengo una hermana menor."],
+["아이가 두 명 있어요.", "I have two kids.", "Tengo dos hijos."],
+["우리 가족은 네 명이에요.", "There are four people in my family.", "Somos cuatro en mi familia."],
+["저는 부모님과 살아요.", "I live with my parents.", "Vivo con mis padres."],
+["어디 살아요?", "Where do you live?", "¿Dónde vives?"],
+["저는 부산에 살아요.", "I live in Busan.", "Vivo en Busan."],
+["이쪽은 제 친구 다니엘이에요.", "This is my friend Daniel.", "Este es mi amigo Daniel."]
+]},
+{ id: 3, title: "기분과 상태", en: "I'm tired / Are you OK?", es: "Estoy cansado / ¿Estás bien?", grammar: "지금의 상태는 estar. 배고픔·추위·졸림은 tener로 말해요.", s: [
+["저 피곤해요.", "I'm tired.", "Estoy cansado.", "여성은 cansada. 형용사는 말하는 사람의 성별에 맞춰요."],
+["괜찮아요?", "Are you OK?", "¿Estás bien?"],
+["배고파요.", "I'm hungry.", "Tengo hambre.", "직역: '배고픔을 가지고 있다'."],
+["목말라요.", "I'm thirsty.", "Tengo sed."],
+["추워요.", "I'm cold.", "Tengo frío."],
+["오늘 기분이 정말 좋아요.", "I feel really good today.", "Me siento muy bien hoy."],
+["좀 스트레스 받아요.", "I'm a little stressed.", "Estoy un poco estresado."],
+["졸려요.", "I'm sleepy.", "Tengo sueño."],
+["너무 신나요!", "I'm so excited!", "¡Estoy muy emocionado!"],
+["걱정돼요.", "I'm worried.", "Estoy preocupado."],
+["지루해요.", "I'm bored.", "Estoy aburrido.", "Soy aburrido라고 하면 '나는 지루한 사람이다'가 돼요."],
+["몸이 안 좋아요.", "I'm sick.", "Estoy enfermo."],
+["무슨 일 있어요?", "What's wrong?", "¿Qué te pasa?"],
+["아무 일도 없어요, 그냥 피곤해요.", "Nothing, I'm just tired.", "Nada, solo estoy cansado."],
+["좀 창피해요.", "I'm a little embarrassed.", "Me da un poco de vergüenza.", "주의: embarazada는 '임신한'이라는 뜻이에요."],
+["걱정하지 마세요.", "Don't worry.", "No te preocupes."]
+]},
+{ id: 4, title: "카페·식당 주문", en: "I'd like ~ / Can I get ~?", es: "Quisiera ~ / ¿Me da ~?", grammar: "가게에서는 usted(존칭)으로 말해요. ¿Me da ~?는 '~ 주시겠어요?'예요.", s: [
+["아메리카노 한 잔 주세요.", "Can I get an Americano, please?", "¿Me da un americano, por favor?"],
+["카페라테 한 잔 주세요.", "I'd like a latte, please.", "Quisiera un café con leche, por favor."],
+["여기서 마실게요.", "For here, please.", "Para tomar aquí, por favor."],
+["포장해 갈게요.", "To go, please.", "Para llevar, por favor."],
+["두 명 자리 주세요.", "A table for two, please.", "Una mesa para dos, por favor."],
+["메뉴판 좀 주시겠어요?", "Can I see the menu, please?", "¿Me trae el menú, por favor?"],
+["뭘 추천하세요?", "What do you recommend?", "¿Qué me recomienda?"],
+["이걸로 할게요.", "I'll have this one.", "Voy a querer este."],
+["물 좀 주세요.", "Could I have some water, please?", "¿Me da agua, por favor?"],
+["고수는 빼 주세요.", "No cilantro, please.", "Sin cilantro, por favor."],
+["정말 맛있어요!", "This is delicious!", "¡Está delicioso!"],
+["계산서 주세요.", "Can I have the check, please?", "La cuenta, por favor."],
+["카드로 낼게요.", "I'll pay by card.", "Voy a pagar con tarjeta."],
+["화장실이 어디예요?", "Where's the restroom?", "¿Dónde está el baño?"],
+["와이파이 비밀번호가 뭐예요?", "What's the Wi-Fi password?", "¿Cuál es la contraseña del wifi?"],
+["아직 생각 중이에요.", "I'm still thinking.", "Todavía lo estoy pensando."]
+]},
+{ id: 5, title: "숫자·가격·쇼핑", en: "How much is ~?", es: "¿Cuánto cuesta ~?", grammar: "명사가 복수면 형용사·관사도 복수. 숫자 20 이상은 treinta y cinco처럼 y로 이어요.", s: [
+["이거 얼마예요?", "How much is this?", "¿Cuánto cuesta esto?"],
+["20달러예요.", "It's twenty dollars.", "Son veinte dólares."],
+["너무 비싸요.", "It's too expensive.", "Es muy caro."],
+["더 싼 거 있어요?", "Do you have anything cheaper?", "¿Tiene algo más barato?"],
+["그냥 구경하는 중이에요.", "I'm just looking.", "Solo estoy mirando."],
+["이거 다른 색 있어요?", "Do you have this in another color?", "¿Lo tiene en otro color?"],
+["입어 봐도 돼요?", "Can I try it on?", "¿Me lo puedo probar?"],
+["너무 커요.", "It's too big.", "Me queda grande.", "직역: '나에게 크게 맞는다'. 옷 크기를 말할 때 써요."],
+["더 작은 사이즈 있어요?", "Do you have a smaller size?", "¿Tiene una talla más chica?", "스페인에서는 chica 대신 pequeña를 써요."],
+["이걸로 살게요.", "I'll take it.", "Me lo llevo."],
+["할인 돼요?", "Is there a discount?", "¿Hay descuento?"],
+["두 개 살게요.", "I'll take two.", "Me llevo dos."],
+["현금만 받아요?", "Is it cash only?", "¿Solo aceptan efectivo?"],
+["영수증 주세요.", "Can I have a receipt?", "¿Me da el recibo?"],
+["봉투는 필요 없어요.", "I don't need a bag.", "No necesito bolsa."],
+["다 해서 얼마예요?", "How much is it altogether?", "¿Cuánto es en total?"]
+]},
+{ id: 6, title: "길 묻기·장소", en: "Where is ~? / Is there ~?", es: "¿Dónde está ~? / ¿Hay ~?", grammar: "위치는 estar, '있다/없다'는 hay(영어 there is/are)예요.", s: [
+["지하철역이 어디예요?", "Where's the subway station?", "¿Dónde está la estación del metro?"],
+["이 근처에 약국 있어요?", "Is there a pharmacy near here?", "¿Hay una farmacia cerca de aquí?"],
+["여기서 멀어요?", "Is it far from here?", "¿Está lejos de aquí?"],
+["걸어서 5분이에요.", "It's a five-minute walk.", "Está a cinco minutos caminando."],
+["쭉 가세요.", "Go straight.", "Siga derecho."],
+["오른쪽으로 도세요.", "Turn right.", "Gire a la derecha."],
+["왼쪽으로 도세요.", "Turn left.", "Gire a la izquierda."],
+["은행 옆에 있어요.", "It's next to the bank.", "Está al lado del banco."],
+["길을 잃었어요.", "I'm lost.", "Estoy perdido."],
+["여기가 어디예요?", "Where am I?", "¿Dónde estoy?"],
+["지도에서 보여 주실 수 있어요?", "Can you show me on the map?", "¿Me lo puede mostrar en el mapa?"],
+["화장실은 2층에 있어요.", "The restroom is on the second floor.", "El baño está en el segundo piso."],
+["버스 정류장은 길 건너편에 있어요.", "The bus stop is across the street.", "La parada del autobús está al otro lado de la calle."],
+["공항에 어떻게 가요?", "How do I get to the airport?", "¿Cómo llego al aeropuerto?"],
+["이 버스 시내 가요?", "Does this bus go downtown?", "¿Este autobús va al centro?"],
+["저도 여기 사람이 아니에요.", "I'm not from here either.", "Yo tampoco soy de aquí."]
+]},
+{ id: 7, title: "시간·하루 일과", en: "I get up at ~", es: "Me levanto a las ~", grammar: "levantarse처럼 '자기 자신을 ~하다' 동사(재귀동사)는 me/te/se를 붙여요.", s: [
+["지금 몇 시예요?", "What time is it?", "¿Qué hora es?"],
+["세 시 반이에요.", "It's three thirty.", "Son las tres y media."],
+["저는 보통 7시에 일어나요.", "I usually get up at seven.", "Normalmente me levanto a las siete."],
+["샤워하고 아침을 먹어요.", "I take a shower and have breakfast.", "Me baño y desayuno.", "멕시코에서는 샤워도 bañarse라고 많이 해요."],
+["8시에 출근해요.", "I go to work at eight.", "Voy al trabajo a las ocho."],
+["지하철로 출근해요.", "I take the subway to work.", "Voy al trabajo en metro."],
+["점심은 12시에 먹어요.", "I have lunch at noon.", "Como a mediodía.", "멕시코에서 comer/comida는 점심을 뜻하기도 해요."],
+["6시에 퇴근해요.", "I get off work at six.", "Salgo del trabajo a las seis."],
+["저녁에는 운동해요.", "I work out in the evening.", "En la noche hago ejercicio.", "스페인에서는 por la noche라고 해요."],
+["주말에는 늦잠 자요.", "I sleep in on weekends.", "Los fines de semana duermo hasta tarde."],
+["몇 시에 자요?", "What time do you go to bed?", "¿A qué hora te acuestas?"],
+["보통 11시쯤 자요.", "I usually go to bed around eleven.", "Normalmente me acuesto como a las once."],
+["요즘 정말 바빠요.", "I'm really busy these days.", "Estoy muy ocupado estos días."],
+["사실 오늘은 쉬는 날이에요.", "Actually, today is my day off.", "En realidad, hoy es mi día libre.", "주의: actualmente는 '현재'라는 뜻이에요."],
+["매일 스페인어를 공부해요.", "I study Spanish every day.", "Estudio español todos los días."],
+["시간이 없어요.", "I don't have time.", "No tengo tiempo."]
+]},
+{ id: 8, title: "좋아하는 것", en: "I like ~ / Do you like ~?", es: "Me gusta ~ / ¿Te gusta ~?", grammar: "gustar는 '~이 나에게 즐거움을 준다' 구조라서 좋아하는 대상이 주어예요.", s: [
+["커피 좋아해요.", "I like coffee.", "Me gusta el café."],
+["고양이 좋아해요?", "Do you like cats?", "¿Te gustan los gatos?", "좋아하는 대상이 복수면 gustan."],
+["매운 음식을 정말 좋아해요.", "I love spicy food.", "Me encanta la comida picante."],
+["공포 영화는 안 좋아해요.", "I don't like horror movies.", "No me gustan las películas de terror."],
+["음악 듣는 걸 좋아해요.", "I like listening to music.", "Me gusta escuchar música."],
+["취미가 뭐예요?", "What are your hobbies?", "¿Cuáles son tus pasatiempos?"],
+["시간 있을 때 뭐 하는 걸 좋아해요?", "What do you like to do in your free time?", "¿Qué te gusta hacer en tu tiempo libre?"],
+["축구 보는 걸 좋아해요.", "I like watching soccer.", "Me gusta ver el fútbol."],
+["제일 좋아하는 음식은 타코예요.", "My favorite food is tacos.", "Mi comida favorita son los tacos."],
+["저도요!", "Me too!", "¡A mí también!", "gustar 문장에 맞장구칠 때는 Yo también이 아니라 A mí también."],
+["저는 아니에요.", "I don't.", "A mí no."],
+["여행하는 걸 좋아해요.", "I like traveling.", "Me gusta viajar."],
+["요리는 별로 안 좋아해요.", "I don't really like cooking.", "No me gusta mucho cocinar."],
+["어떤 음악 좋아해요?", "What kind of music do you like?", "¿Qué tipo de música te gusta?"],
+["그는 책 읽는 걸 좋아해요.", "He likes reading.", "A él le gusta leer."],
+["저게 더 좋아요.", "I like that one better.", "Me gusta más ese."]
+]},
+{ id: 9, title: "원하는 것·계획", en: "I want to ~ / I'm going to ~", es: "Quiero ~ / Voy a ~", grammar: "querer + 동사원형 = ~하고 싶다, ir a + 동사원형 = ~할 거다.", s: [
+["물 마시고 싶어요.", "I want to drink some water.", "Quiero tomar agua."],
+["멕시코에 가고 싶어요.", "I want to go to Mexico.", "Quiero ir a México."],
+["뭐 하고 싶어요?", "What do you want to do?", "¿Qué quieres hacer?"],
+["오늘 밤에 뭐 할 거예요?", "What are you going to do tonight?", "¿Qué vas a hacer esta noche?"],
+["친구를 만날 거예요.", "I'm going to meet a friend.", "Voy a ver a un amigo.", "사람이 목적어면 앞에 a를 붙여요."],
+["내일 쇼핑하러 갈 거예요.", "I'm going to go shopping tomorrow.", "Mañana voy a ir de compras."],
+["집에서 쉴 거예요.", "I'm going to rest at home.", "Voy a descansar en casa."],
+["같이 갈래요?", "Do you want to come with me?", "¿Quieres venir conmigo?"],
+["커피 한잔할래요?", "Do you want to get a coffee?", "¿Quieres tomar un café?"],
+["다음 달에 여행 갈 거예요.", "I'm going to travel next month.", "El próximo mes voy a viajar."],
+["스페인어를 잘하고 싶어요.", "I want to speak Spanish well.", "Quiero hablar bien español."],
+["오늘은 일찍 자고 싶어요.", "I want to go to bed early today.", "Hoy quiero acostarme temprano."],
+["아무것도 하기 싫어요.", "I don't want to do anything.", "No quiero hacer nada.", "스페인어는 부정어를 겹쳐 써요(no ... nada)."],
+["이번 주말에 계획 있어요?", "Do you have any plans this weekend?", "¿Tienes planes este fin de semana?"],
+["아직 모르겠어요.", "I don't know yet.", "Todavía no sé."],
+["새 휴대폰을 살 거예요.", "I'm going to buy a new phone.", "Voy a comprar un celular nuevo.", "스페인에서는 móvil이라고 해요."]
+]},
+{ id: 10, title: "부탁과 허락", en: "Can you ~? / Can I ~?", es: "¿Puede ~? / ¿Puedo ~?", grammar: "poder + 동사원형. 모르는 사람에게는 puede, 친구에게는 puedes.", s: [
+["좀 도와주실 수 있어요?", "Can you help me?", "¿Me puede ayudar?"],
+["사진 좀 찍어 주실래요?", "Could you take a picture of us?", "¿Nos puede tomar una foto?"],
+["창문 좀 열어도 돼요?", "Can I open the window?", "¿Puedo abrir la ventana?"],
+["여기 앉아도 돼요?", "Can I sit here?", "¿Me puedo sentar aquí?"],
+["물론이죠.", "Of course.", "Claro."],
+["죄송하지만 안 돼요.", "Sorry, you can't.", "Lo siento, no se puede."],
+["잠깐만요.", "Just a moment, please.", "Un momento, por favor."],
+["이거 써도 돼요?", "Can I use this?", "¿Puedo usar esto?"],
+["펜 좀 빌려주실래요?", "Can I borrow a pen?", "¿Me presta una pluma?", "스페인에서는 bolígrafo라고 해요."],
+["다시 설명해 주실 수 있어요?", "Could you explain it again?", "¿Me lo puede explicar otra vez?"],
+["여기 적어 주실래요?", "Could you write it down for me?", "¿Me lo puede escribir?"],
+["문 좀 닫아 줄래?", "Can you close the door?", "¿Puedes cerrar la puerta?", "친구에게는 puedes(tú)."],
+["실례합니다, 좀 지나갈게요.", "Excuse me.", "Con permiso.", "지나가거나 자리를 뜰 때는 con permiso, 사람을 부를 때는 disculpe."],
+["여기서 사진 찍어도 돼요?", "Can I take pictures here?", "¿Se pueden tomar fotos aquí?"],
+["정말 고마워요.", "Thank you so much.", "Muchas gracias."],
+["천만에요.", "You're welcome.", "De nada."]
+]}
+]},
+{ level: 2, name: "일상 확장", desc: "과거·미래·비교로 이야기 넓히기", units: [
+{ id: 11, title: "지난 주말 이야기", en: "I went ~ / What did you do?", es: "Fui ~ / ¿Qué hiciste?" },
+{ id: 12, title: "경험 말하기", en: "Have you ever ~?", es: "¿Alguna vez has ~?" },
+{ id: 13, title: "예전 습관", en: "I used to ~", es: "Antes ~aba / ~ía" },
+{ id: 14, title: "약속 잡기", en: "Let's ~ / Are you free ~?", es: "¿Qué tal si ~? / ¿Estás libre ~?" },
+{ id: 15, title: "건강·병원·약국", en: "My ~ hurts", es: "Me duele ~" },
+{ id: 16, title: "호텔·교통", en: "I have a reservation", es: "Tengo una reservación" },
+{ id: 17, title: "날씨와 계절", en: "It's hot / It's raining", es: "Hace calor / Está lloviendo" },
+{ id: 18, title: "의견 말하기", en: "I think ~ / In my opinion", es: "Creo que ~ / Me parece que ~" },
+{ id: 19, title: "비교하기", en: "~er than / the most ~", es: "más ~ que / el más ~" },
+{ id: 20, title: "전화·메시지", en: "I'll call you / I'll let you know", es: "Te llamo / Te aviso" }
+]},
+{ level: 3, name: "자연스러운 대화", desc: "조언·감정·가정으로 깊이 있게", units: [
+{ id: 21, title: "조언하기", en: "You should ~", es: "Deberías ~ / Te recomiendo que ~" },
+{ id: 22, title: "바람과 감정", en: "I hope ~ / I'm glad ~", es: "Espero que ~ / Me alegra que ~" },
+{ id: 23, title: "가정하기", en: "If I were ~, I would ~", es: "Si fuera ~, ~ría" },
+{ id: 24, title: "후회와 아쉬움", en: "I should have ~", es: "Debería haber ~" },
+{ id: 25, title: "직장 대화", en: "Could you take a look at ~?", es: "¿Podrías revisar ~?" },
+{ id: 26, title: "불만·문제 해결", en: "I'm afraid there's a problem", es: "Disculpe, hay un problema" },
+{ id: 27, title: "남의 말 전하기", en: "He said that ~", es: "Dijo que ~" },
+{ id: 28, title: "취미·문화 깊게 말하기", en: "What I like most is ~", es: "Lo que más me gusta es ~" },
+{ id: 29, title: "사회 이슈 토론", en: "On the other hand ~", es: "Por otro lado ~" },
+{ id: 30, title: "종합 대화", en: "1~29단원 패턴 섞기", es: "1~29단원 패턴 섞기" }
+]}
+];
+
+// 단어·표현 뜻 사전 (덩어리 표현이 먼저 매칭되고, 나머지는 단어 단위)
+const GLOSS = {
+en: {
+// --- 표현 ---
+"nice to meet you": "만나서 반가워요", "how are you": "어떻게 지내요?", "good morning": "좋은 아침", "good afternoon": "좋은 오후",
+"good night": "잘 자요", "see you later": "나중에 봐요", "see you": "또 봐요", "thank you": "고마워요", "you're welcome": "천만에요",
+"excuse me": "실례합니다", "of course": "물론이죠", "just a moment": "잠깐만요", "how much": "얼마", "how old": "몇 살",
+"what time": "몇 시", "where are you from": "어디 출신이에요?", "what do you do": "무슨 일 하세요?", "can i get": "~ 주시겠어요?",
+"i'd like": "~ 주세요 (원해요)", "could i have": "~ 주시겠어요?", "can i have": "~ 받을 수 있을까요?", "i'll have": "~로 할게요",
+"for here": "여기서 먹고 감", "to go": "포장", "a table for two": "두 명 자리", "years old": "~살", "brothers or sisters": "형제자매",
+"there are": "~이 있다", "is there": "~이 있나요?", "get up": "일어나다", "take a shower": "샤워하다", "have breakfast": "아침을 먹다",
+"have lunch": "점심을 먹다", "go to work": "출근하다", "get off work": "퇴근하다", "work out": "운동하다", "sleep in": "늦잠 자다",
+"go to bed": "자러 가다", "these days": "요즘", "day off": "쉬는 날", "every day": "매일", "free time": "여가 시간",
+"what kind of": "어떤 종류의", "a little": "조금", "i'm going to": "나는 ~할 거예요", "are you going to": "너는 ~할 거야?",
+"want to": "~하고 싶다", "go shopping": "쇼핑하러 가다", "next month": "다음 달", "try it on": "입어 보다", "just looking": "그냥 구경하는 중",
+"i'll take": "~를 살게요", "near here": "이 근처에", "far from here": "여기서 먼", "go straight": "쭉 가다", "turn right": "오른쪽으로 돌다",
+"turn left": "왼쪽으로 돌다", "next to": "~ 옆에", "across the street": "길 건너편에", "second floor": "2층", "bus stop": "버스 정류장",
+"subway station": "지하철역", "get to": "~에 가다(도착하다)", "write it down": "적다", "take a picture of": "~의 사진을 찍다",
+"say that again": "다시 말하다", "speak more slowly": "더 천천히 말하다", "horror movies": "공포 영화", "pay by card": "카드로 내다",
+"take the subway": "지하철을 타다", "in the evening": "저녁에", "on weekends": "주말마다", "at noon": "정오에", "not from here": "여기 사람이 아닌",
+"what's wrong": "무슨 일 있어요?", "don't worry": "걱정하지 마세요", "i don't know": "모르겠어요", "on the map": "지도에서",
+"come with me": "나와 같이 가다", "get a coffee": "커피 한잔하다", "help me": "나를 돕다", "spicy food": "매운 음식",
+// --- 단어 ---
+"a": "하나의", "across": "건너편에", "actually": "사실은", "afternoon": "오후", "again": "다시", "airport": "공항", "altogether": "다 합쳐서",
+"am": "~이다", "americano": "아메리카노", "an": "하나의", "and": "그리고", "another": "다른", "any": "어떤 (의문문)", "anything": "무엇이든",
+"are": "~이다", "around": "~쯤", "at": "~에(서)", "bag": "봉투", "bank": "은행", "bed": "침대", "better": "더 (좋게)", "big": "큰",
+"bored": "지루한", "borrow": "빌리다", "breakfast": "아침 식사", "brothers": "남자 형제", "bus": "버스", "busy": "바쁜", "buy": "사다",
+"by": "~로 (수단)", "can": "~할 수 있다", "can't": "~할 수 없다", "card": "카드", "cash": "현금", "cats": "고양이들", "cheaper": "더 싼",
+"check": "계산서", "cilantro": "고수", "close": "닫다", "coffee": "커피", "cold": "추운", "color": "색", "come": "오다", "company": "회사",
+"cooking": "요리하기", "could": "~해 주실 수 있나요 (정중)", "day": "날", "days": "날들", "delicious": "맛있는", "discount": "할인",
+"do": "(의문·부정을 만드는 말)", "does": "(do의 3인칭)", "dollars": "달러", "don't": "~하지 않다", "door": "문", "downtown": "시내",
+"drink": "마시다", "early": "일찍", "eight": "8", "either": "(부정문) ~도", "eleven": "11", "embarrassed": "창피한", "engineer": "엔지니어",
+"english": "영어", "evening": "저녁", "every": "매 ~", "excited": "신난", "expensive": "비싼", "explain": "설명하다", "family": "가족",
+"far": "먼", "favorite": "가장 좋아하는", "feel": "느끼다", "five-minute": "5분 거리의", "floor": "층", "food": "음식", "for": "~을 위해",
+"four": "4", "free": "한가한, 자유로운", "friend": "친구", "from": "~에서, ~출신", "get": "얻다, 받다", "go": "가다", "going": "가는 중",
+"good": "좋은", "have": "가지다, 먹다", "he": "그", "help": "돕다", "here": "여기", "hi": "안녕", "hobbies": "취미들", "home": "집",
+"horror": "공포", "how": "어떻게", "hungry": "배고픈", "i": "나", "i'd": "나는 ~하고 싶다 (I would)", "i'll": "나는 ~할게 (I will)",
+"i'm": "나는 ~이다 (I am)", "in": "~에, ~안에", "is": "~이다", "it": "그것", "it's": "그것은 ~이다 (it is)", "just": "그냥, 딱",
+"kids": "아이들", "kind": "종류", "know": "알다", "korean": "한국 사람", "later": "나중에", "latte": "라테", "learning": "배우는 중",
+"left": "왼쪽", "like": "좋아하다", "likes": "좋아하다 (3인칭)", "listening": "듣기", "little": "조금", "live": "살다", "looking": "보는 중",
+"lost": "길을 잃은", "love": "정말 좋아하다", "lunch": "점심", "map": "지도", "married": "결혼한", "me": "나를, 나에게", "meet": "만나다",
+"menu": "메뉴", "more": "더", "morning": "아침", "movies": "영화들", "much": "많이", "music": "음악", "my": "나의", "name": "이름",
+"near": "가까이", "need": "필요하다", "new": "새로운", "next": "다음", "nice": "좋은", "night": "밤", "no": "아니, 없는", "noon": "정오",
+"not": "~아니다", "nothing": "아무것도 아님", "of": "~의", "off": "쉬는", "ok": "괜찮은", "old": "나이가 ~인", "on": "~에",
+"one": "것 (하나)", "only": "오직", "open": "열다", "or": "또는", "parents": "부모님", "password": "비밀번호", "pay": "지불하다",
+"pen": "펜", "people": "사람들", "pharmacy": "약국", "phone": "휴대폰", "picture": "사진", "pictures": "사진들", "plans": "계획",
+"please": "부탁해요", "reading": "읽기", "really": "정말", "receipt": "영수증", "recommend": "추천하다", "rest": "쉬다",
+"restroom": "화장실", "right": "오른쪽", "say": "말하다", "second": "두 번째", "see": "보다", "seven": "7", "shopping": "쇼핑",
+"show": "보여주다", "shower": "샤워", "sick": "아픈", "sister": "자매 (여동생·누나·언니)", "sisters": "자매들", "sit": "앉다", "six": "6",
+"size": "사이즈", "sleep": "자다", "sleepy": "졸린", "slowly": "천천히", "smaller": "더 작은", "so": "정말, 너무", "soccer": "축구",
+"some": "약간의", "sorry": "미안한", "spanish": "스페인어", "speak": "말하다", "spicy": "매운", "station": "역", "still": "아직",
+"straight": "똑바로", "street": "길", "stressed": "스트레스 받은", "study": "공부하다", "subway": "지하철", "table": "테이블",
+"tacos": "타코", "take": "가져가다, 사다, 타다", "thank": "감사하다", "thanks": "고마워", "that": "저것, 그것", "the": "그",
+"there": "거기", "these": "이것들", "thinking": "생각하는 중", "thirsty": "목마른", "thirty": "30", "thirty-five": "35", "this": "이것, 이",
+"three": "3", "time": "시간", "tired": "피곤한", "to": "~로, ~하기", "today": "오늘", "tomorrow": "내일", "tonight": "오늘 밤",
+"too": "너무, ~도", "travel": "여행하다", "traveling": "여행하기", "try": "해 보다", "turn": "돌다", "twenty": "20", "two": "2",
+"us": "우리를", "use": "사용하다", "usually": "보통", "walk": "걷기", "want": "원하다", "watching": "보기", "water": "물",
+"weekend": "주말", "weekends": "주말들", "well": "잘", "what": "무엇", "what's": "무엇이 ~이다 (what is)", "where": "어디",
+"where's": "어디에 ~있다 (where is)", "wi-fi": "와이파이", "window": "창문", "with": "~와 함께", "work": "일, 직장",
+"worried": "걱정하는", "worry": "걱정하다", "write": "쓰다", "years": "년, 살", "yet": "아직", "you": "너, 당신",
+"you're": "너는 ~이다 (you are)", "younger": "더 어린", "your": "너의, 당신의",
+"minsu": "민수 (이름)", "sara": "사라 (이름)", "daniel": "다니엘 (이름)", "seoul": "서울", "busan": "부산", "mexico": "멕시코"
+},
+es: {
+// --- 표현 ---
+"mucho gusto": "만나서 반가워요", "por favor": "부탁해요 (please)", "buenos días": "좋은 아침", "buenas tardes": "좋은 오후",
+"buenas noches": "좋은 밤, 잘 자요", "hasta luego": "나중에 봐요", "hasta mañana": "내일 봐요", "muchas gracias": "정말 고마워요",
+"de nada": "천만에요", "con permiso": "실례합니다", "lo siento": "미안해요", "me llamo": "내 이름은 ~ (나를 ~라고 부른다)",
+"te llamas": "네 이름은 (너를 ~라고 부르니)", "cómo estás": "어떻게 지내?", "de dónde eres": "어디 출신이야?",
+"a qué te dedicas": "무슨 일 해?", "qué te pasa": "무슨 일 있어?", "no te preocupes": "걱정하지 마", "un poco": "조금",
+"me da un poco de vergüenza": "좀 창피해요 (직역: 나에게 약간의 부끄러움을 준다)", "me da": "저에게 주시겠어요",
+"me trae": "가져다주시겠어요", "café con leche": "카페라테", "para tomar aquí": "여기서 마심", "para llevar": "포장",
+"voy a querer": "~로 할게요", "me gusta": "나는 ~을 좋아해", "me gustan": "나는 ~들을 좋아해", "te gusta": "너는 ~을 좋아해",
+"te gustan": "너는 ~들을 좋아해", "le gusta": "~은 좋아해", "me encanta": "나는 ~을 정말 좋아해", "a mí también": "나도 그래",
+"a mí no": "나는 아니야", "a él": "그는 (강조)", "me queda": "나에게 (크기가) ~하다", "me lo llevo": "이걸로 살게요",
+"me llevo": "(제가) 살게요", "me lo puedo probar": "입어 봐도 돼요?", "cuánto cuesta": "얼마예요", "al lado del": "~ 옆에",
+"cerca de aquí": "이 근처에", "lejos de aquí": "여기서 먼", "al otro lado de": "~의 건너편에", "a la derecha": "오른쪽으로",
+"a la izquierda": "왼쪽으로", "en realidad": "사실은", "día libre": "쉬는 날", "tiempo libre": "여가 시간", "fin de semana": "주말",
+"fines de semana": "주말 (마다)", "todos los días": "매일", "hasta tarde": "늦게까지", "me levanto": "나는 일어나다",
+"me baño": "나는 샤워하다", "me acuesto": "나는 자러 가다", "te acuestas": "너는 자러 가다", "me siento": "나는 ~라고 느끼다",
+"hago ejercicio": "운동하다", "a las": "~시에", "son las": "(지금) ~시예요", "y media": "반 (30분)", "ir de compras": "쇼핑하러 가다",
+"voy a": "나는 ~할 거야", "vas a": "너는 ~할 거야", "otra vez": "다시", "no se puede": "안 돼요", "se pueden": "~해도 되다 (일반)",
+"me puede": "저를·저에게 ~해 주실 수 있어요?", "nos puede": "우리에게 ~해 주실 수 있어요?", "me lo puede": "저에게 그걸 ~해 주실 수 있어요?",
+"me presta": "빌려주시겠어요?", "en total": "다 해서", "más despacio": "더 천천히", "qué hora es": "몇 시예요?", "a qué hora": "몇 시에",
+"el próximo mes": "다음 달", "esta noche": "오늘 밤", "estos días": "요즘", "este fin de semana": "이번 주말", "segundo piso": "2층",
+"estación del metro": "지하철역", "parada del autobús": "버스 정류장", "qué tipo de": "어떤 종류의", "todavía no": "아직 ~않다",
+"me puedo sentar": "앉아도 돼요?", "a un amigo": "친구를", "en la noche": "저녁에, 밤에", "con mis padres": "부모님과",
+"tengo hambre": "배고파요 (직역: 배고픔을 가지고 있다)", "tengo sed": "목말라요 (직역: 갈증을 가지고 있다)",
+"tengo frío": "추워요 (직역: 추위를 가지고 있다)", "tengo sueño": "졸려요 (직역: 졸음을 가지고 있다)",
+// --- 단어 ---
+"a": "~에, ~로", "abrir": "열다", "aburrido": "지루한", "aceptan": "(그들이) 받다", "acostarme": "(내가) 자러 가다",
+"aeropuerto": "공항", "agua": "물", "al": "~로 (a + el)", "algo": "무언가", "americano": "아메리카노", "amigo": "친구",
+"aprendiendo": "배우는 중", "aquí": "여기", "autobús": "버스", "ayudar": "돕다", "años": "해, 살", "banco": "은행", "barato": "싼",
+"baño": "화장실", "bien": "잘, 좋아", "bolsa": "봉투", "café": "커피", "calle": "길", "caminando": "걸어서", "cansado": "피곤한",
+"caro": "비싼", "casa": "집", "casado": "결혼한", "celular": "휴대폰", "centro": "시내", "cerca": "가까이", "cerrar": "닫다",
+"chica": "작은", "cilantro": "고수", "cinco": "5", "claro": "물론", "cocinar": "요리하다", "color": "색",
+"comida": "음식", "como": "나는 먹는다 / 대략 ~쯤", "comprar": "사다", "con": "~와 함께, ~로", "conmigo": "나와 함께",
+"contraseña": "비밀번호", "coreano": "한국 사람", "cuatro": "4", "cuenta": "계산서", "cuesta": "값이 ~이다", "cuál": "무엇, 어느 것",
+"cuáles": "무엇들", "cuánto": "얼마", "cuántos": "몇 개의", "cómo": "어떻게", "da": "주다", "de": "~의, ~에서", "dedicas": "(너는) 종사하다",
+"del": "~의 (de + el)", "derecha": "오른쪽", "derecho": "똑바로", "desayuno": "(나는) 아침을 먹다", "descansar": "쉬다",
+"descuento": "할인", "despacio": "천천히", "dos": "2", "duermo": "(나는) 자다", "día": "날", "días": "날들", "dólares": "달러",
+"dónde": "어디", "efectivo": "현금", "ejercicio": "운동", "el": "그 (남성)", "en": "~에, ~안에, ~로", "encanta": "매우 좋아하게 하다",
+"enfermo": "아픈", "eres": "(너는) ~이다", "es": "~이다", "escribir": "쓰다", "escuchar": "듣다", "ese": "그것", "español": "스페인어",
+"esta": "이 (여성)", "estación": "역", "este": "이것, 이 (남성)", "esto": "이것", "estoy": "(나는) ~(한 상태)이다",
+"estresado": "스트레스 받은", "estudio": "(나는) 공부하다", "está": "~에 있다, ~(한 상태)이다", "estás": "(너는) ~(한 상태)이다",
+"explicar": "설명하다", "familia": "가족", "farmacia": "약국", "favorita": "가장 좋아하는", "foto": "사진", "fotos": "사진들",
+"fútbol": "축구", "gatos": "고양이들", "gire": "도세요", "gracias": "고마워요", "grande": "큰", "hablar": "말하다", "hacer": "하다",
+"hay": "~이 있다", "hermana": "자매 (여동생·언니)", "hermanos": "형제자매", "hijos": "자녀들", "hola": "안녕", "hoy": "오늘",
+"igualmente": "마찬가지로", "ingeniero": "엔지니어", "inglés": "영어", "ir": "가다", "la": "그 (여성)", "las": "그 (여성 복수)",
+"leer": "읽다", "lejos": "먼", "libre": "한가한, 자유로운", "llego": "(나는) 도착하다", "lo": "그것을", "los": "그 (남성 복수)",
+"mapa": "지도", "mañana": "내일", "me": "나를, 나에게", "menor": "더 어린", "menú": "메뉴", "mesa": "테이블", "metro": "지하철",
+"mi": "나의", "minutos": "분", "mirando": "보는 중", "mis": "나의 (복수)", "momento": "순간, 잠깐", "mostrar": "보여주다",
+"muy": "아주, 정말", "más": "더", "mediodía": "정오", "música": "음악", "nada": "아무것도", "necesito": "(나는) 필요하다", "no": "아니, ~않다",
+"normalmente": "보통", "nuevo": "새로운", "ocho": "8", "ocupado": "바쁜", "once": "11", "otro": "다른", "pagar": "지불하다",
+"para": "~를 위해, ~용", "películas": "영화들", "pensando": "생각하는 중", "perdido": "길을 잃은", "picante": "매운",
+"planes": "계획", "pluma": "펜", "por": "~로, ~에", "preocupado": "걱정하는", "puede": "(당신은) ~할 수 있다",
+"puedes": "(너는) ~할 수 있다", "puedo": "(나는) ~할 수 있다", "puerta": "문", "quieres": "(너는) 원하다", "quiero": "(나는) 원하다",
+"quisiera": "~하고 싶습니다 (정중)", "qué": "무엇", "recibo": "영수증", "recomienda": "(당신이) 추천하다", "repetirlo": "그것을 반복하다",
+"salgo": "(나는) 나가다", "se": "(일반적으로)", "segundo": "두 번째", "seis": "6", "siete": "7", "siga": "계속 가세요", "sin": "~없이",
+"solo": "그냥, 오직", "somos": "우리는 ~이다", "son": "~이다 (복수)", "soy": "(나는) ~이다", "sé": "(나는) 알다", "tacos": "타코",
+"talla": "사이즈", "también": "~도", "tampoco": "~도 아니다", "tarjeta": "카드", "te": "너를, 너에게", "temprano": "일찍",
+"tengo": "(나는) 가지고 있다", "terror": "공포", "tiempo": "시간", "tiene": "(당신은) 가지고 있다", "tienes": "(너는) 가지고 있다",
+"todavía": "아직", "tomar": "마시다, 찍다", "trabajo": "일, 직장", "treinta": "30", "tres": "3", "tu": "너의", "tus": "너의 (복수)",
+"tú": "너", "un": "하나의 (남성)", "una": "하나의 (여성)", "usar": "사용하다", "va": "가다", "veinte": "20", "venir": "오다",
+"ventana": "창문", "ver": "보다, 만나다", "viajar": "여행하다", "vives": "(너는) 살다", "vivo": "(나는) 살다", "wifi": "와이파이",
+"y": "그리고", "yo": "나", "él": "그", "estos": "이것들", "emocionado": "신난", "explicarlo": "그것을 설명하다",
+"minsu": "민수 (이름)", "sara": "사라 (이름)", "daniel": "다니엘 (이름)", "seúl": "서울", "busan": "부산", "méxico": "멕시코",
+"mucho": "많이", "pasatiempos": "취미들", "hora": "시각", "mes": "달", "semana": "주", "noche": "밤", "tarde": "늦게",
+"gusta": "좋아하게 하다", "otra": "다른", "probar": "입어 보다, 맛보다", "trae": "가져오다", "llevar": "가져가다", "total": "합계",
+"queda": "(크기가) 맞다", "empresa": "회사", "delicioso": "맛있는", "voy": "(나는) 가다", "presta": "빌려주다", "ayuda": "도움"
+}
+};
+
+</script>
+<script>
+(function(){
+"use strict";
+
+// ---------- storage (localStorage with in-memory fallback) ----------
+const KEY = "bilingo.v1";
+let mem = {};
+function load(){ try{ const v = localStorage.getItem(KEY); if(v) return JSON.parse(v); }catch(e){} return mem.__s || null; }
+function save(){ mem.__s = S; try{ localStorage.setItem(KEY, JSON.stringify(S)); }catch(e){} }
+let S = load() || {};
+S.stats = S.stats || {};      // sid -> {en:0|1, es:0|1, n:count}
+S.set = Object.assign({ esVar:"es-MX", enVar:"en-US", rate:0.9, useMic:true, autoNext:true, wordHint:"always", showWords:true }, S.set || {});
+S.level = S.level || 1;
+
+// ---------- data helpers ----------
+const UNITS = {}; CURRICULUM.forEach(L => L.units.forEach(u => { u.level = L.level; UNITS[u.id] = u; }));
+function sentences(u){ return (u.s || []).map((a, i) => ({ sid: u.id + "-" + i, unit: u.id, ko: a[0], en: a[1], es: a[2], note: a[3] || "" })); }
+function allSentences(){ let r = []; CURRICULUM.forEach(L => L.units.forEach(u => r = r.concat(sentences(u)))); return r; }
+function unitProgress(u){
+  const list = sentences(u); if(!list.length) return 0;
+  const done = list.filter(x => { const st = S.stats[x.sid]; return st && st.en === 1 && st.es === 1; }).length;
+  return Math.round(done / list.length * 100);
+}
+function reviewList(){ return allSentences().filter(x => { const st = S.stats[x.sid]; return st && (st.en === 0 || st.es === 0); }); }
+
+// ---------- word glosses ----------
+const glossCache = {};
+function gloss(text, lang){
+  const ck = lang + "|" + text; if(glossCache[ck]) return glossCache[ck];
+  const dict = (typeof GLOSS !== "undefined" ? GLOSS : {})[lang] || {};
+  const raw = text.split(/\s+/).filter(Boolean).map(w => w.replace(/^[^\p{L}\d']+|[^\p{L}\d']+$/gu, ""));
+  const key = raw.map(w => w.toLowerCase().replace(/[’]/g, "'"));
+  const out = [];
+  for(let i = 0; i < raw.length; ){
+    let hit = null;
+    for(let n = Math.min(7, raw.length - i); n >= 1; n--){
+      const k = key.slice(i, i + n).join(" ");
+      if(dict[k]){ hit = { t: raw.slice(i, i + n).join(" "), m: dict[k], n }; break; }
+    }
+    if(hit){ out.push(hit); i += hit.n; } else { if(raw[i]) out.push({ t: raw[i], m: "" }); i++; }
+  }
+  return glossCache[ck] = out;
+}
+function seededShuffle(arr, seed){
+  let h = 0; for(const c of seed) h = (h * 31 + c.charCodeAt(0)) >>> 0;
+  const a = arr.slice();
+  for(let i = a.length - 1; i > 0; i--){ h = (h * 1103515245 + 12345) >>> 0; const j = h % (i + 1); [a[i], a[j]] = [a[j], a[i]]; }
+  // 원래 순서와 같으면 한 번 돌림
+  if(a.length > 1 && a.every((x, k) => x === arr[k])) a.push(a.shift());
+  return a;
+}
+function chipsHtml(items, lang){
+  return `<div class="chips ${lang}">${items.filter(x => x.m).map(x => `<span class="chip"><b>${esc(x.t)}</b>${esc(x.m)}</span>`).join("")}</div>`;
+}
+
+// ---------- speech synthesis ----------
+const synth = window.speechSynthesis;
+let voices = [];
+function refreshVoices(){ try{ voices = synth ? synth.getVoices() : []; }catch(e){ voices = []; } }
+refreshVoices();
+if(synth && "onvoiceschanged" in synth) synth.onvoiceschanged = refreshVoices;
+function langCode(lang){ return lang === "en" ? S.set.enVar : S.set.esVar; }
+function pickVoice(code){
+  if(!voices.length) refreshVoices();
+  const base = code.slice(0,2);
+  const exact = voices.filter(v => v.lang && v.lang.replace("_","-").toLowerCase() === code.toLowerCase());
+  const pref = v => (/google|natural|premium|enhanced|siri/i.test(v.name) ? 0 : 1);
+  if(exact.length) return exact.sort((a,b) => pref(a)-pref(b))[0];
+  const alt = code === "es-MX" ? ["es-US","es-419"] : code === "es-ES" ? [] : code === "en-US" ? ["en-CA"] : ["en-AU","en-IE"];
+  for(const a of alt){ const v = voices.find(v => v.lang && v.lang.replace("_","-").toLowerCase() === a.toLowerCase()); if(v) return v; }
+  return voices.find(v => v.lang && v.lang.toLowerCase().startsWith(base)) || null;
+}
+function speak(text, lang, rateMul){
+  return new Promise(resolve => {
+    if(!synth){ toast("이 브라우저는 음성 재생을 지원하지 않아요."); return resolve(); }
+    try{ synth.cancel(); }catch(e){}
+    const u = new SpeechSynthesisUtterance(text);
+    const code = langCode(lang);
+    u.lang = code; const v = pickVoice(code); if(v) u.voice = v;
+    u.rate = S.set.rate * (rateMul || 1);
+    let done = false; const fin = () => { if(!done){ done = true; resolve(); } };
+    u.onend = fin; u.onerror = fin;
+    setTimeout(fin, 2500 + text.length * 160 / u.rate);
+    synth.speak(u);
+  });
+}
+
+// ---------- speech recognition ----------
+const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+let micBlocked = false;
+let activeRec = null;
+function canMic(){ return !!SR && S.set.useMic && !micBlocked; }
+function listen(lang, onInterim){
+  return new Promise(resolve => {
+    let rec;
+    try{ rec = new SR(); }catch(e){ micBlocked = true; return resolve({ error:"unsupported" }); }
+    activeRec = rec;
+    rec.lang = langCode(lang); rec.interimResults = true; rec.maxAlternatives = 5; rec.continuous = false;
+    let finals = null, lastInterim = "", err = null;
+    rec.onresult = ev => {
+      const res = ev.results[ev.results.length - 1];
+      if(res.isFinal){ finals = []; for(let i = 0; i < res.length; i++) finals.push(res[i].transcript); }
+      else { lastInterim = res[0].transcript; onInterim && onInterim(lastInterim); }
+    };
+    rec.onerror = ev => { err = ev.error; };
+    rec.onend = () => {
+      activeRec = null;
+      if(err === "not-allowed" || err === "service-not-allowed" || err === "audio-capture"){ micBlocked = true; return resolve({ error: err }); }
+      if(finals && finals.length) return resolve({ alts: finals });
+      if(lastInterim) return resolve({ alts: [lastInterim] });
+      resolve({ error: err || "no-speech" });
+    };
+    try{ rec.start(); }catch(e){ activeRec = null; resolve({ error:"start-failed" }); }
+  });
+}
+function stopListening(){ if(activeRec){ try{ activeRec.stop(); }catch(e){} } }
+
+// ---------- answer checking ----------
+const EN_CONTR = { "i'm":"i am","you're":"you are","we're":"we are","they're":"they are","he's":"he is","she's":"she is","it's":"it is","that's":"that is","what's":"what is","where's":"where is","there's":"there is","here's":"here is","let's":"let us","i'd":"i would","you'd":"you would","i'll":"i will","you'll":"you will","we'll":"we will","i've":"i have","don't":"do not","doesn't":"does not","didn't":"did not","can't":"can not","cannot":"can not","won't":"will not","isn't":"is not","aren't":"are not","wasn't":"was not","haven't":"have not","okay":"ok" };
+const EN_NUM = { zero:0,one:1,two:2,three:3,four:4,five:5,six:6,seven:7,eight:8,nine:9,ten:10,eleven:11,twelve:12,thirteen:13,fourteen:14,fifteen:15,sixteen:16,seventeen:17,eighteen:18,nineteen:19 };
+const EN_TENS = { twenty:20,thirty:30,forty:40,fifty:50,sixty:60,seventy:70,eighty:80,ninety:90 };
+const ES_NUM = { cero:0,uno:1,dos:2,tres:3,cuatro:4,cinco:5,seis:6,siete:7,ocho:8,nueve:9,diez:10,once:11,doce:12,trece:13,catorce:14,quince:15,dieciseis:16,diecisiete:17,dieciocho:18,diecinueve:19,veinte:20,veintiuno:21,veintidos:22,veintitres:23,veinticuatro:24,veinticinco:25,veintiseis:26,veintisiete:27,veintiocho:28,veintinueve:29 };
+const ES_TENS = { treinta:30,cuarenta:40,cincuenta:50,sesenta:60,setenta:70,ochenta:80,noventa:90 };
+function stripAccents(s){ return s.normalize("NFD").replace(/[̀-ͯ]/g, ""); }
+function norm(text, lang){
+  let s = text.toLowerCase().replace(/[’‘`]/g, "'");
+  s = s.replace(/\$\s?(\d+)/g, lang === "en" ? "$1 dollars" : "$1 dolares");
+  s = s.replace(/wi-?fi/g, "wifi");
+  if(lang === "en") s = s.replace(/[a-z]+'[a-z]+|cannot|okay/g, m => EN_CONTR[m] || m);
+  s = stripAccents(s).replace(/[^a-z0-9ñ'\s-]/g, " ").replace(/[-']/g, " ");
+  let w = s.split(/\s+/).filter(Boolean);
+  // numbers -> digits
+  const out = [];
+  for(let i = 0; i < w.length; i++){
+    const t = w[i];
+    if(lang === "en"){
+      if(t in EN_TENS){ const n = w[i+1]; if(n && EN_NUM[n] > 0 && EN_NUM[n] < 10){ out.push(String(EN_TENS[t] + EN_NUM[n])); i++; } else out.push(String(EN_TENS[t])); continue; }
+      if(t in EN_NUM){ out.push(String(EN_NUM[t])); continue; }
+    } else {
+      if(t in ES_TENS){ if(w[i+1] === "y" && w[i+2] in ES_NUM && ES_NUM[w[i+2]] < 10){ out.push(String(ES_TENS[t] + ES_NUM[w[i+2]])); i += 2; } else out.push(String(ES_TENS[t])); continue; }
+      if(t in ES_NUM){ out.push(String(ES_NUM[t])); continue; }
+    }
+    out.push(t);
+  }
+  // 21~99 숫자는 '십의 자리 + 일의 자리'로 쪼개서 양쪽 표기를 맞춤 (thirty five = 35, treinta y cinco = 35)
+  const fin = [];
+  out.forEach(t => {
+    const n = /^\d+$/.test(t) ? +t : -1;
+    if(n > 20 && n < 100 && n % 10 && !(lang === "es" && n < 30)){
+      fin.push(String(n - n % 10)); if(lang === "es") fin.push("y"); fin.push(String(n % 10));
+    } else fin.push(t);
+  });
+  return fin;
+}
+// display tokens of target with their normalized forms (for highlighting)
+function targetTokens(text, lang){
+  return text.split(/\s+/).filter(Boolean).map(tok => ({ raw: tok, n: norm(tok, lang) }));
+}
+function lcsMatch(a, b){ // returns boolean array for a (target) words matched in b
+  const n = a.length, m = b.length, dp = Array.from({length:n+1}, () => new Array(m+1).fill(0));
+  for(let i = n-1; i >= 0; i--) for(let j = m-1; j >= 0; j--) dp[i][j] = a[i] === b[j] ? dp[i+1][j+1] + 1 : Math.max(dp[i+1][j], dp[i][j+1]);
+  const hit = new Array(n).fill(false); let i = 0, j = 0;
+  while(i < n && j < m){ if(a[i] === b[j]){ hit[i] = true; i++; j++; } else if(dp[i+1][j] >= dp[i][j+1]) i++; else j++; }
+  return hit;
+}
+function grade(target, alts, lang){
+  const toks = targetTokens(target, lang);
+  const flat = []; toks.forEach((t, ti) => t.n.forEach(w => flat.push({ w, ti })));
+  // please / por favor 는 빠뜨려도 감점하지 않음
+  flat.forEach((f, k) => { f.opt = lang === "en" ? f.w === "please" : (f.w === "favor" && k > 0 && flat[k-1].w === "por") || (f.w === "por" && flat[k+1] && flat[k+1].w === "favor"); });
+  let best = null;
+  for(const alt of alts){
+    const said = norm(alt, lang);
+    const hit = lcsMatch(flat.map(f => f.w), said);
+    const req = flat.filter(f => !f.opt).length;
+    const got = flat.filter((f, k) => !f.opt && hit[k]).length;
+    const score = req ? got / req : 0;
+    if(!best || score > best.score) best = { score, hit, heard: alt };
+  }
+  const tokHit = toks.map(() => true);
+  flat.forEach((f, k) => { if(!best.hit[k] && !f.opt) tokHit[f.ti] = false; });
+  return { score: best.score, heard: best.heard, tokens: toks.map((t, k) => ({ raw: t.raw, hit: tokHit[k] })), pass: best.score >= 0.8 };
+}
+
+// ---------- UI helpers ----------
+const app = document.getElementById("app");
+function esc(s){ return String(s).replace(/[&<>"]/g, c => ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;" }[c])); }
+function toast(msg){ const t = document.createElement("div"); t.className = "toast"; t.textContent = msg; document.body.appendChild(t); setTimeout(() => t.remove(), 3200); }
+function on(sel, fn){ app.querySelectorAll(sel).forEach(el => el.addEventListener("click", fn)); }
+let view = { name: "home" };
+let listenToken = 0;
+function go(v){ listenToken++; stopListening(); try{ synth && synth.cancel(); }catch(e){} view = v; render(); window.scrollTo(0, 0); }
+
+function micNotice(){
+  if(!SR) return `<div class="notice">이 브라우저는 <b>음성 인식</b>을 지원하지 않아요. 말한 뒤 정답을 보고 스스로 채점하는 방식으로 진행돼요. 음성 채점은 안드로이드·PC의 크롬에서 가장 잘 돼요.</div>`;
+  if(micBlocked) return `<div class="notice">이 화면에서는 <b>마이크를 쓸 수 없어서</b> 스스로 채점하는 방식으로 진행돼요. 음성 채점을 쓰려면 이 앱을 웹 주소(https)로 직접 열어 주세요.</div>`;
+  return "";
+}
+
+// ---------- views ----------
+function render(){
+  if(view.name === "home") return renderHome();
+  if(view.name === "unit") return renderUnit();
+  if(view.name === "speak") return renderSpeak();
+  if(view.name === "listen") return renderListen();
+  if(view.name === "summary") return renderSummary();
+}
+
+function renderHome(){
+  const L = CURRICULUM.find(l => l.level === S.level) || CURRICULUM[0];
+  const rv = reviewList().length;
+  app.innerHTML = `
+    <header class="top"><h1>두 언어 회화<small>한 문장씩 영어로, 그리고 스페인어로</small></h1>
+      <button class="icon-btn" id="set" aria-label="설정">⚙︎</button></header>
+    ${micNotice()}
+    <div class="tabs">${CURRICULUM.map(l => `<button class="tab ${l.level === L.level ? "on" : ""}" data-lv="${l.level}">${l.level}단계<small>${esc(l.name)}</small></button>`).join("")}</div>
+    <div class="review-bar"><div class="t">복습할 문장 <b>${rv}</b>개</div><button class="pill-btn" id="rv" ${rv ? "" : "disabled"}>복습하기</button></div>
+    ${L.units.map(u => {
+      const has = !!(u.s && u.s.length), p = unitProgress(u);
+      return `<button class="unit ${has ? "" : "locked"}" data-u="${u.id}">
+        <div class="num">${u.id}</div>
+        <div class="body"><div class="title">${esc(u.title)}</div><div class="pat">${esc(u.en)} · ${esc(u.es)}</div>
+        ${has ? `<div class="bar"><i style="width:${p}%"></i></div>` : ""}</div>
+        <div class="pct">${has ? p + "%" : "준비 중"}</div></button>`;
+    }).join("")}`;
+  on(".tab", e => { S.level = +e.currentTarget.dataset.lv; save(); render(); });
+  on(".unit", e => { const u = UNITS[+e.currentTarget.dataset.u]; if(!u.s || !u.s.length){ toast("이 단원의 문장은 곧 추가될 예정이에요."); return; } go({ name:"unit", unit:u.id }); });
+  on("#rv", () => startSpeak(reviewList(), "복습"));
+  on("#set", openSettings);
+}
+
+function renderUnit(){
+  const u = UNITS[view.unit], list = sentences(u);
+  app.innerHTML = `
+    <button class="back" id="back">← 단원 목록</button>
+    <div class="unit-head"><h2>${u.id}. ${esc(u.title)}</h2>
+      <div style="font-size:14px"><span style="color:var(--en)">${esc(u.en)}</span><br><span style="color:var(--es)">${esc(u.es)}</span></div>
+      <div class="g">💡 ${esc(u.grammar || "")}</div></div>
+    <button class="mode" id="m-listen"><b>🎧 듣고 따라 말하기</b><span>영어 → 스페인어 순서로 들려줘요. 들리는 대로 소리 내어 따라 하세요.</span></button>
+    <button class="mode" id="m-speak"><b>🎤 말하기 도전</b><span>한국어 뜻만 보고 영어로, 이어서 스페인어로 말해요. ${canMic() ? "앱이 듣고 채점해요." : "말한 뒤 정답을 보고 스스로 채점해요."}</span></button>
+    <button class="mode" id="m-shuffle"><b>🔀 섞어서 도전</b><span>순서를 섞어서 말하기 도전을 해요.</span></button>
+    <div class="list">${list.map(x => { const st = S.stats[x.sid];
+      const mk = !st ? "" : (st.en === 1 && st.es === 1 ? "✅" : "🔁");
+      return `<div class="row"><span class="mark">${mk}</span><div class="ko">${esc(x.ko)}</div><div class="en">${esc(x.en)}</div><div class="es">${esc(x.es)}</div></div>`; }).join("")}</div>`;
+  on("#back", () => go({ name:"home" }));
+  on("#m-listen", () => go({ name:"listen", list, i:0, title:u.title, unit:u.id, auto:false }));
+  on("#m-speak", () => startSpeak(list, u.title, u.id));
+  on("#m-shuffle", () => startSpeak(list.slice().sort(() => Math.random() - .5), u.title + " (섞기)", u.id));
+}
+
+// ----- listen mode -----
+function renderListen(){
+  const v = view, x = v.list[v.i];
+  app.innerHTML = `
+    <div class="pbar"><button class="back" id="back" style="margin:0">✕</button>
+      <div class="track"><i style="width:${(v.i + 1) / v.list.length * 100}%"></i></div><div class="cnt">${v.i + 1}/${v.list.length}</div></div>
+    <div class="card">
+      <div class="ko-big">${esc(x.ko)}</div>
+      <div class="lang en" id="L-en"><div class="lab">🇺🇸 ENGLISH <button class="speak-btn" id="p-en">🔊</button></div><div class="txt">${esc(x.en)}</div>${S.set.showWords ? chipsHtml(gloss(x.en, "en"), "en") : ""}</div>
+      <div class="lang es" id="L-es"><div class="lab">${S.set.esVar === "es-ES" ? "🇪🇸" : "🇲🇽"} ESPAÑOL <button class="speak-btn" id="p-es">🔊</button></div><div class="txt">${esc(x.es)}</div>${S.set.showWords ? chipsHtml(gloss(x.es, "es"), "es") : ""}</div>
+      ${x.note ? `<div class="note">📝 ${esc(x.note)}</div>` : ""}
+      <div class="listen-ctrl">
+        <button class="big ghost" id="prev" ${v.i ? "" : "disabled"} style="flex:1">← 이전</button>
+        <button class="big ${v.auto ? "bad" : ""}" id="auto" style="flex:1.4">${v.auto ? "■ 멈추기" : "▶ 연속 재생"}</button>
+        <button class="big ghost" id="next" style="flex:1">다음 →</button>
+      </div>
+      <div class="mic-hint" style="margin-top:10px">연속 재생: 각 문장을 들려준 뒤 따라 말할 시간을 줘요.</div>
+    </div>`;
+  on("#back", () => go({ name:"unit", unit:v.unit }));
+  on("#p-en", () => { stopAuto(); speak(x.en, "en"); });
+  on("#p-es", () => { stopAuto(); speak(x.es, "es"); });
+  on("#prev", () => { stopAuto(); v.i--; render(); });
+  on("#next", () => { stopAuto(); if(v.i < v.list.length - 1){ v.i++; render(); } else go({ name:"unit", unit:v.unit }); });
+  on("#auto", () => { if(v.auto){ stopAuto(); render(); } else { v.auto = true; render(); runAuto(); } });
+}
+function stopAuto(){ if(view.auto){ view.auto = false; listenToken++; try{ synth.cancel(); }catch(e){} } }
+const wait = ms => new Promise(r => setTimeout(r, ms));
+async function runAuto(){
+  const tok = ++listenToken, v = view;
+  while(v.auto && tok === listenToken){
+    const x = v.list[v.i];
+    for(const lang of ["en", "es"]){
+      if(tok !== listenToken) return;
+      const box = document.getElementById("L-" + lang); const other = document.getElementById("L-" + (lang === "en" ? "es" : "en"));
+      if(box) box.classList.remove("dim"); if(other) other.classList.add("dim");
+      const t0 = Date.now(); await speak(x[lang], lang); const dur = Date.now() - t0;
+      if(tok !== listenToken) return;
+      await wait(Math.max(1500, dur * 1.3)); // 따라 말할 시간
+    }
+    if(tok !== listenToken) return;
+    if(v.i < v.list.length - 1){ v.i++; render(); } else { v.auto = false; render(); return; }
+  }
+}
+
+// ----- speak mode -----
+function startSpeak(list, title, unit){
+  if(!list.length) return;
+  go({ name:"speak", list, i:0, title, unit, phase:"en", res:{}, revealed:{}, results:[], interim:"" });
+}
+function record(sid, lang, pass){
+  const st = S.stats[sid] || (S.stats[sid] = { n:0 });
+  st[lang] = pass ? 1 : 0; if(lang === "es") st.n++;
+  save();
+}
+function renderSpeak(){
+  const v = view, x = v.list[v.i];
+  const flag = S.set.esVar === "es-ES" ? "🇪🇸" : "🇲🇽";
+  const block = lang => {
+    const r = v.res[lang], active = v.phase === lang, revealed = v.revealed[lang];
+    const label = lang === "en" ? "🇺🇸 ENGLISH" : flag + " ESPAÑOL";
+    let inner;
+    const words = S.set.showWords ? chipsHtml(gloss(x[lang], lang), lang) : "";
+    if(r && r.tokens){
+      inner = `<div class="txt">${r.tokens.map(t => `<span class="w ${t.hit ? "hit" : "miss"}">${esc(t.raw)}</span>`).join(" ")}</div>
+        <div class="heard">들린 말: “${esc(r.heard)}”</div>${words}`;
+    } else if(revealed || (r && r.self !== undefined)){
+      inner = `<div class="txt">${esc(x[lang])}</div>${words}`;
+    } else if(active){
+      const showChips = S.set.wordHint === "always" || v.chips === lang;
+      const items = seededShuffle(gloss(x[lang], lang).filter(g => g.m), x.sid + lang);
+      inner = `<div class="placeholder">${v.interim ? "“" + esc(v.interim) + "”" : (lang === "en" ? "영어로 말해 보세요" : "이번엔 스페인어로 말해 보세요")}</div>
+        ${showChips ? `<div class="chips-title">힌트 단어 (순서는 섞여 있어요)</div>${chipsHtml(items, lang)}` : ""}
+        ${v.hint && v.hint === lang ? `<div class="heard">첫 단어: ${esc(x[lang].split(" ").slice(0, 2).join(" "))} …</div>` : ""}`;
+    } else {
+      inner = `<div class="placeholder">영어 다음 차례</div>`;
+    }
+    const badge = r && r.self !== undefined ? `<span class="score ${r.pass ? "ok" : "bad"}">${r.pass ? "맞음" : "다시"}</span>`
+               : r && r.tokens ? `<span class="score ${r.pass ? "ok" : "bad"}">${Math.round(r.score * 100)}점</span>` : "";
+    const showPlay = r || revealed;
+    return `<div class="lang ${lang} ${!active && !r && !revealed ? "dim" : ""}"><div class="lab"><span>${label} ${badge}</span>${showPlay ? `<button class="speak-btn" data-play="${lang}">🔊</button>` : ""}</div>${inner}</div>`;
+  };
+  const cur = v.phase, r = v.res[cur];
+  let controls = "";
+  if(cur !== "done"){
+    if(r){
+      controls = `<div class="actions">
+        <button class="big ghost grow" id="retry">🎤 다시</button>
+        <button class="big ${cur === "en" ? "es" : ""} grow" id="advance">${cur === "en" ? "스페인어로 →" : (v.i < v.list.length - 1 ? "다음 문장 →" : "결과 보기")}</button></div>`;
+    } else if(v.revealed[cur] && !canMic()){
+      controls = `<div class="actions"><button class="big bad grow" id="selfbad">✗ 틀렸어요</button><button class="big ok grow" id="selfok">✓ 맞았어요</button></div>`;
+    } else if(canMic()){
+      controls = `<button class="mic ${cur} ${v.listening ? "rec" : ""}" id="mic" aria-label="말하기">${v.listening ? "■" : "🎤"}</button>
+        <div class="mic-hint">${v.listening ? "듣고 있어요… 다 말하면 잠시 기다리세요" : "버튼을 누르고 말하세요"}</div>
+        <div class="small-links">${S.set.wordHint !== "always" && v.chips !== cur ? `<button id="chipsbtn">힌트 단어</button>` : ""}<button id="hint">첫 단어</button><button id="giveup">모르겠어요</button></div>`;
+    } else {
+      controls = `<div class="mic-hint" style="margin-top:14px">소리 내어 말한 다음 정답을 확인하세요</div>
+        <div class="actions"><button class="big ${cur}" id="reveal" style="width:100%">정답 확인 🔊</button></div>
+        <div class="small-links">${S.set.wordHint !== "always" && v.chips !== cur ? `<button id="chipsbtn">힌트 단어</button>` : ""}<button id="hint">첫 단어</button></div>`;
+    }
+  }
+  app.innerHTML = `
+    ${v.i === 0 && cur === "en" && !r ? micNotice() : ""}
+    <div class="pbar"><button class="back" id="back" style="margin:0">✕</button>
+      <div class="track"><i style="width:${(v.i + (cur === "en" ? 0 : .5)) / v.list.length * 100}%"></i></div><div class="cnt">${v.i + 1}/${v.list.length}</div></div>
+    <div class="card">
+      <div class="ko-big">${esc(x.ko)}</div>
+      ${block("en")}${block("es")}
+      ${x.note && (v.res.es || v.revealed.es) ? `<div class="note">📝 ${esc(x.note)}</div>` : ""}
+      ${controls}
+    </div>`;
+  on("#back", () => go(v.unit ? { name:"unit", unit:v.unit } : { name:"home" }));
+  app.querySelectorAll("[data-play]").forEach(b => b.addEventListener("click", () => speak(x[b.dataset.play], b.dataset.play)));
+  on("#mic", () => v.listening ? stopListening() : doListen());
+  on("#hint", () => { v.hint = cur; render(); });
+  on("#chipsbtn", () => { v.chips = cur; render(); });
+  on("#giveup", () => { v.res[cur] = { tokens: targetTokens(x[cur], cur).map(t => ({ raw:t.raw, hit:false })), score:0, pass:false, heard:"(건너뜀)" }; record(x.sid, cur, false); render(); speak(x[cur], cur); });
+  on("#reveal", () => { v.revealed[cur] = true; render(); speak(x[cur], cur); });
+  on("#selfok", () => selfGrade(true));
+  on("#selfbad", () => selfGrade(false));
+  on("#retry", () => { delete v.res[cur]; v.revealed[cur] = false; v.interim = ""; render(); if(canMic()) doListen(); });
+  on("#advance", advance);
+}
+function selfGrade(pass){
+  const v = view, x = v.list[v.i], cur = v.phase;
+  v.res[cur] = { self:true, pass }; record(x.sid, cur, pass); render();
+  if(pass && S.set.autoNext) setTimeout(() => { if(view === v && v.res[cur]) advance(); }, 500);
+}
+async function doListen(){
+  const v = view, x = v.list[v.i], cur = v.phase, tok = ++listenToken;
+  try{ synth && synth.cancel(); }catch(e){}
+  v.listening = true; v.interim = ""; render();
+  const out = await listen(cur, t => { if(tok === listenToken){ v.interim = t; const p = app.querySelector(".lang." + cur + " .placeholder"); if(p) p.textContent = "“" + t + "”"; } });
+  if(tok !== listenToken) return;
+  v.listening = false;
+  if(out.error){
+    if(micBlocked){ toast("마이크를 쓸 수 없어서 스스로 채점 방식으로 바꿨어요."); }
+    else if(out.error === "no-speech"){ toast("소리가 들리지 않았어요. 다시 눌러 말해 보세요."); }
+    else toast("음성 인식 오류: " + out.error);
+    render(); return;
+  }
+  const g = grade(x[cur], out.alts, cur);
+  v.res[cur] = g; record(x.sid, cur, g.pass); render();
+  await speak(x[cur], cur);
+  if(g.pass && S.set.autoNext && view === v && v.res[cur] === g) advance();
+}
+function advance(){
+  const v = view, x = v.list[v.i];
+  if(v.phase === "en"){ v.phase = "es"; v.interim = ""; v.hint = null; v.chips = null; render(); if(canMic() && S.set.autoNext) doListen(); return; }
+  v.results.push({ sid:x.sid, en:!!(v.res.en && v.res.en.pass), es:!!(v.res.es && v.res.es.pass) });
+  if(v.i < v.list.length - 1){
+    v.i++; v.phase = "en"; v.res = {}; v.revealed = {}; v.interim = ""; v.hint = null; v.chips = null; render();
+    if(canMic() && S.set.autoNext) doListen();
+  } else {
+    go({ name:"summary", results:v.results, title:v.title, unit:v.unit, list:v.list });
+  }
+}
+function renderSummary(){
+  const v = view, n = v.results.length;
+  const en = v.results.filter(r => r.en).length, es = v.results.filter(r => r.es).length;
+  const pct = n ? Math.round((en + es) / (n * 2) * 100) : 0;
+  const wrong = v.list.filter(x => { const r = v.results.find(r => r.sid === x.sid); return r && (!r.en || !r.es); });
+  app.innerHTML = `
+    <div class="card summary">
+      <div style="font-size:14px;color:var(--muted)">${esc(v.title)}</div>
+      <div class="big-num">${pct}%</div>
+      <div class="sub">${pct >= 80 ? "좋아요! 다음 단원으로 넘어가도 돼요." : "틀린 문장을 한 번 더 연습해 보세요."}</div>
+      <div class="statrow"><div class="stat en"><b>${en}/${n}</b>영어</div><div class="stat es"><b>${es}/${n}</b>스페인어</div></div>
+      ${wrong.length ? `<button class="big" id="again" style="margin-bottom:8px">틀린 ${wrong.length}문장 다시 하기</button>` : ""}
+      <button class="big ghost" id="home">${v.unit ? "단원으로 돌아가기" : "처음으로"}</button>
+    </div>`;
+  on("#again", () => startSpeak(wrong, v.title + " (다시)", v.unit));
+  on("#home", () => go(v.unit ? { name:"unit", unit:v.unit } : { name:"home" }));
+}
+
+// ----- settings -----
+function openSettings(){
+  const bg = document.createElement("div"); bg.className = "sheet-bg";
+  const seg = (key, opts) => `<div class="seg" data-k="${key}">${opts.map(([val, lab]) => `<button data-v="${val}" class="${String(S.set[key]) === String(val) ? "on" : ""}">${lab}</button>`).join("")}</div>`;
+  const vEn = pickVoice(S.set.enVar), vEs = pickVoice(S.set.esVar);
+  bg.innerHTML = `<div class="sheet">
+    <h3>설정</h3>
+    <div class="field"><label>스페인어 발음·인식</label>${seg("esVar", [["es-MX","🇲🇽 중남미(멕시코)"],["es-ES","🇪🇸 스페인"]])}</div>
+    <div class="field"><label>영어 발음·인식</label>${seg("enVar", [["en-US","🇺🇸 미국"],["en-GB","🇬🇧 영국"]])}</div>
+    <div class="field"><label>말하기 속도</label>${seg("rate", [[0.7,"천천히"],[0.9,"보통"],[1.05,"빠르게"]])}</div>
+    <div class="field"><label>음성 인식으로 채점</label>${seg("useMic", [[true,"사용"],[false,"스스로 채점"]])}</div>
+    <div class="field"><label>말하기 도전: 힌트 단어</label>${seg("wordHint", [["always","항상 보이기"],["tap","눌러서 보기"]])}</div>
+    <div class="field"><label>듣기·정답에 단어 뜻 표시</label>${seg("showWords", [[true,"보이기"],[false,"숨기기"]])}</div>
+    <div class="field"><label>맞히면 자동으로 다음</label>${seg("autoNext", [[true,"켜기"],[false,"끄기"]])}</div>
+    <div class="info">재생 음성: 영어 ${esc(vEn ? vEn.name : "기본")}, 스페인어 ${esc(vEs ? vEs.name : "기본(기기에 스페인어 음성이 없을 수 있어요)")}<br>
+    음성 인식: ${SR ? (micBlocked ? "이 화면에서는 마이크가 막혀 있어요" : "사용 가능") : "이 브라우저는 미지원"}</div>
+    <div class="actions"><button class="big ghost grow" id="reset">학습 기록 초기화</button><button class="big grow" id="close">닫기</button></div>
+  </div>`;
+  document.body.appendChild(bg);
+  bg.addEventListener("click", e => { if(e.target === bg) close(); });
+  bg.querySelectorAll(".seg").forEach(sg => sg.querySelectorAll("button").forEach(b => b.addEventListener("click", () => {
+    const k = sg.dataset.k; let val = b.dataset.v;
+    if(val === "true") val = true; else if(val === "false") val = false; else if(!isNaN(+val)) val = +val;
+    S.set[k] = val; save();
+    sg.querySelectorAll("button").forEach(x => x.classList.toggle("on", x === b));
+    if(k === "esVar") speak("Hola, ¿cómo estás?", "es"); if(k === "enVar") speak("Hi, how are you?", "en"); if(k === "rate") speak("Nice to meet you.", "en");
+  })));
+  let armed = false;
+  bg.querySelector("#reset").addEventListener("click", e => { if(!armed){ armed = true; e.currentTarget.textContent = "한 번 더 누르면 초기화"; return; } S.stats = {}; save(); close(); toast("학습 기록을 지웠어요."); });
+  bg.querySelector("#close").addEventListener("click", close);
+  function close(){ bg.remove(); render(); }
+}
+
+window.__bilingo = { grade, norm, gloss };
+render();
+})();
+</script>
+</body>
+</html>
